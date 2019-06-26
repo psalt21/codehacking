@@ -11137,3 +11137,12 @@ a.text-dark:focus {
   padding-top: 0px;
 }
 
+.nav {
+  -webkit-flex-direction: column;
+          flex-direction: column;
+}
+
+.sidebar {
+  margin-top: 306px;
+}
+
