@@ -17,6 +17,15 @@
             "program": "${file}",
             "cwd": "${fileDirname}",
             "port": 9000
+        },
+        {
+            "name": "Xdebug Codehacking",
+            "type": "php",
+            "request": "launch",
+            "pathMappings": {
+                "/home/vagrant/Code/codehacking": "${workspaceFolder}"
+            },
+            "port": 9000
         }
     ]
 }
