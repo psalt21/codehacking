@@ -94,7 +94,7 @@
                 </div>
             @endif
 
-            <div class="content">
+            <div class="checkout container">
                 <form method="post" id="payment-form" action="{{ url('/checkout') }}">
                     @csrf
                     <section>
@@ -104,6 +104,72 @@
                                 <input id="amount" name="amount" type="tel" min="1" placeholder="Amount" value="10">
                             </div>
                         </label>
+
+                        <div id="customer-name">
+                            <label for="first name">
+                                <span class="input-label">First Name</span>
+                                <div class="input-wrapper first-name-wrapper">
+                                    <input id="first-name" name="firstName" type="text" placeholder="First Name">
+                                </div>
+                            </label>
+
+                            <label for="last name">
+                                <span class="input-label">Last Name</span>
+                                <div class="input-wrapper last-name-wrapper">
+                                    <input id="last-name" name="lastName" type="text" placeholder="Last Name">
+                                </div>
+                            </label>
+                        </div>
+
+                        <label for="email">
+                            <span class="input-label">Email</span>
+                            <div class="input-wrapper email-wrapper">
+                                <input id="email" name="email" type="text" placeholder="Email">
+                            </div>
+                        </label>
+
+                        <div id="billing-address">
+                            <label for="country">
+                                <span class="input-label">Country</span>
+                                <div class="input-wrapper country-wrapper">
+                                    <select name="country">
+                                        <option value="United States">United States</option>
+                                        <option value="">Other</option>
+                                    </select>
+                                </div>
+                            </label>
+                            <div>
+                                <label for="street address">
+                                    <span class="input-label">Street Address</span>
+                                    <div class="input-wrapper street-address-wrapper">
+                                        <input id="street-address-input" name="streetAddress" type="text" placeholder="Street Address">
+                                    </div>
+                                </label>
+
+                                <label for="city">
+                                    <span class="input-label">City</span>
+                                    <div class="input-wrapper city-wrapper">
+                                        <input id="city-input" name="city" type="text" placeholder="City">
+                                    </div>
+                                </label>
+                            </div>
+                            <div>
+                                <label for="state">
+                                    <span class="input-label">State</span>
+                                    <div class="input-wrapper state-wrapper">
+                                        <input id="state-input" name="state" type="text" placeholder="State">
+                                    </div>
+                                </label>
+
+                                <label for="postal code">
+                                    <span class="input-label">Postal Code</span>
+                                    <div class="input-wrapper postal-code-wrapper">
+                                        <input id="postal-code-input" name="postalCode" type="text" placeholder="Postal/Zip Code">
+                                    </div>
+                                </label>
+                            </div>
+
+                        </div>
 
                         <div class="bt-drop-in-wrapper">
                             <div id="bt-dropin"></div>
@@ -123,9 +189,9 @@
         braintree.dropin.create({
             authorization: client_token,
             selector: '#bt-dropin',
-            paypal: {
-            flow: 'vault'
-            }
+            // paypal: {
+            // flow: 'vault'
+            // }
         }, function (createErr, instance) {
             if (createErr) {
             console.log('Create Error', createErr);

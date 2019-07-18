@@ -35,12 +35,21 @@ Route::post('/checkout', function (Request $request) {
         'privateKey' => config('services.braintree.privateKey')
     ]);
 
-    $amount = $request->amount;
-    $nonce = $request->payment_method_nonce;
-
     $result = $gateway->transaction()->sale([
-        'amount' => $amount,
-        'paymentMethodNonce' => $nonce,
+        'amount' => $request->amount,
+        'paymentMethodNonce' => $request->payment_method_nonce,
+        'customer' => [
+            'firstName' => $request->firstName,
+            'lastName' => $request->lastName,
+            'email' => $request->email
+        ],
+        'billing' => [
+            'countryName' => $request->country,
+            'streetAddress' => $request->streetAddress,
+            'locality' => $request->city,
+            'region' => $request->state,
+            'postalCode' => $request->postalCode,
+        ],
         'options' => [
             'submitForSettlement' => true
         ]
@@ -49,7 +58,7 @@ Route::post('/checkout', function (Request $request) {
     if ($result->success) {
         $transaction = $result->transaction;
         // header("Location: " . $baseUrl . "transaction.php?id=" . $transaction->id);
-        return back()->with('success_message', 'Transaction successful. The ID is:' . $transaction->id);
+        return back()->with('success_message', 'Transaction successful. The ID is:'. $transaction->id);
     } else {
         $errorString = "";
 

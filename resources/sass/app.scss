@@ -24,3 +24,71 @@
 .sidebar {
     margin-top: 306px;
 }
+
+.container {
+    padding-top: 100px;
+}
+.checkout {
+    text-align: left;
+  }
+
+  .checkout section {
+    margin: 0;
+    padding: 0;
+
+  }
+
+  @media (min-width: 641px) {
+    .checkout section {
+      padding: 30px 0;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .checkout section {
+      padding: 10px 0;
+    }
+  }
+
+  .checkout.dismiss {
+    -webkit-animation: fadeOutDown 250ms 1 normal cubic-bezier(0.215, 0.61, 0.355, 1) both 0s;
+    -moz-animation: fadeOutDown 250ms 1 normal cubic-bezier(0.215, 0.61, 0.355, 1) both 0s;
+    animation: fadeOutDown 250ms 1 normal cubic-bezier(0.215, 0.61, 0.355, 1) both 0s;
+  }
+
+  .checkout h1,
+  .checkout p,
+  .checkout section,
+  .checkout .button {
+    animation: none;
+  }
+
+  .checkout h1 {
+    -webkit-animation-delay: 200ms;
+    -moz-animation-delay: 200ms;
+    animation-delay: 200ms;
+  }
+
+  .checkout header p {
+    -webkit-animation-delay: 300ms;
+    -moz-animation-delay: 300ms;
+    animation-delay: 300ms;
+  }
+
+  .checkout section {
+    -webkit-animation-delay: 450ms;
+    -moz-animation-delay: 450ms;
+    animation-delay: 450ms;
+    -webkit-animation-duration: 550ms;
+    -moz-animation-duration: 550ms;
+    animation-duration: 550ms;
+  }
+
+  .checkout .button {
+    -webkit-animation-delay: 650ms;
+    -moz-animation-delay: 650ms;
+    animation-delay: 650ms;
+    -webkit-animation-duration: 700ms;
+    -moz-animation-duration: 700ms;
+    animation-duration: 700ms;
+  }

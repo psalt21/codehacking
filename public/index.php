@@ -1,73 +1,62 @@
 <?php require_once("../includes/braintree_init.php"); ?>
 
-<html>
-<?php require_once("../includes/head.php"); ?>
-<body>
+<?php
 
-    <?php require_once("../includes/header.php"); ?>
+/**
+ * Laravel - A PHP Framework For Web Artisans
+ *
+ * @package  Laravel
+ * @author   Taylor Otwell <taylor@laravel.com>
+ */
 
-    <div class="wrapper">
-        <div class="checkout container">
+define('LARAVEL_START', microtime(true));
 
-            <header>
-                <h1>Hi, <br>Let's test a transaction</h1>
-                <p>
-                    Make a test payment with Braintree using PayPal or a card
-                </p>
-            </header>
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader for
+| our application. We just need to utilize it! We'll simply require it
+| into the script here so that we don't have to worry about manual
+| loading any of our classes later on. It feels great to relax.
+|
+*/
 
-            <form method="post" id="payment-form" action="<?php echo $baseUrl;?>checkout.php">
-                <section>
-                    <label for="amount">
-                        <span class="input-label">Amount</span>
-                        <div class="input-wrapper amount-wrapper">
-                            <input id="amount" name="amount" type="tel" min="1" placeholder="Amount" value="10">
-                        </div>
-                    </label>
+require __DIR__.'/../vendor/autoload.php';
 
-                    <div class="bt-drop-in-wrapper">
-                        <div id="bt-dropin"></div>
-                    </div>
-                </section>
+/*
+|--------------------------------------------------------------------------
+| Turn On The Lights
+|--------------------------------------------------------------------------
+|
+| We need to illuminate PHP development, so let us turn on the lights.
+| This bootstraps the framework and gets it ready for use, then it
+| will load up this application so that we can run it and send
+| the responses back to the browser and delight our users.
+|
+*/
 
-                <input id="nonce" name="payment_method_nonce" type="hidden" />
-                <button class="button" type="submit"><span>Test Transaction</span></button>
-            </form>
-        </div>
-    </div>
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
-    <script src="https://js.braintreegateway.com/web/dropin/1.18.0/js/dropin.min.js"></script>
-    <script>
-        var form = document.querySelector('#payment-form');
-        var client_token = "<?php echo($gateway->ClientToken()->generate()); ?>";
+/*
+|--------------------------------------------------------------------------
+| Run The Application
+|--------------------------------------------------------------------------
+|
+| Once we have the application, we can handle the incoming request
+| through the kernel, and send the associated response back to
+| the client's browser allowing them to enjoy the creative
+| and wonderful application we have prepared for them.
+|
+*/
 
-        braintree.dropin.create({
-          authorization: client_token,
-          selector: '#bt-dropin',
-          paypal: {
-            flow: 'vault'
-          }
-        }, function (createErr, instance) {
-          if (createErr) {
-            console.log('Create Error', createErr);
-            return;
-          }
-          form.addEventListener('submit', function (event) {
-            event.preventDefault();
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
-            instance.requestPaymentMethod(function (err, payload) {
-              if (err) {
-                console.log('Request Payment Method Error', err);
-                return;
-              }
+$response = $kernel->handle(
+    $request = Illuminate\Http\Request::capture()
+);
 
-              // Add the nonce to the form and submit
-              document.querySelector('#nonce').value = payload.nonce;
-              form.submit();
-            });
-          });
-        });
-    </script>
-    <script src="javascript/demo.js"></script>
-</body>
-</html>
+$response->send();
+
+$kernel->terminate($request, $response);
