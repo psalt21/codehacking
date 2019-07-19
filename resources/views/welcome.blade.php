@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" ng-app="app">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,6 +18,21 @@
                 font-weight: 200;
                 height: 100vh;
                 margin: 0;
+            }
+
+            input {
+                height: 30px;
+                font-size: 16px;
+                padding-left: 5px;
+                width: 98%;
+            }
+
+            label {
+                padding-top: 10px;
+            }
+
+            ::placeholder {
+                opacity: .35;
             }
 
             .full-height {
@@ -61,6 +76,80 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            .checkout {
+                margin: 0 25px;
+                min-width: 480px;
+            }
+
+            .cost {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+
+            }
+
+            .cost-item {
+                padding-bottom: 4px;
+            }
+
+            .total {
+                font-size: 21px;
+                font-weight: bold;
+            }
+
+            #email {
+                width: 65%;
+            }
+
+            #address-form {
+                background-color: #f5f5f5;
+                padding: 10px 5px;
+                margin-top: 10px;
+            }
+
+            #customer-name, #billing-address {
+                padding: 12px 0;
+            }
+
+            #customer-name, #sub-address {
+                display: flex;
+                flex-direction: row;
+                align-items: stretch;
+                width: 98.5%;
+            }
+
+            #country {
+                padding-bottom: 10px;
+            }
+
+            #email {
+                width: 60%;
+            }
+
+            #last-name, #state, #postal-code {
+                margin-left: 22px;
+            }
+
+            #city {
+                width: 65%;
+            }
+
+            #state {
+                width: 10%
+            }
+
+            #postal-code {
+                width: 25%;
+            }
+
+            #last-name, #first-name {
+                width: 50%;
+            }
+
+            #amount {
+                width: 75px;
+            }
         </style>
     </head>
     <body>
@@ -97,84 +186,90 @@
             <div class="checkout container">
                 <form method="post" id="payment-form" action="{{ url('/checkout') }}">
                     @csrf
-                    <section>
-                        <label for="amount">
+                        <label id="amount" for="amount">
                             <span class="input-label">Amount</span>
                             <div class="input-wrapper amount-wrapper">
-                                <input id="amount" name="amount" type="tel" min="1" placeholder="Amount" value="10">
+                                <input id="amount" name="amount" ng-model="amount" type="tel" min="1" placeholder="Amount" value="10">
                             </div>
                         </label>
 
                         <div id="customer-name">
-                            <label for="first name">
-                                <span class="input-label">First Name</span>
-                                <div class="input-wrapper first-name-wrapper">
-                                    <input id="first-name" name="firstName" type="text" placeholder="First Name">
-                                </div>
-                            </label>
+                                <label id="first-name" for="first name">
+                                    <span class="input-label">First Name</span>
+                                    <div class="input-wrapper first-name-wrapper">
+                                        <input name="firstName" type="text" placeholder="First Name">
+                                    </div>
+                                </label>
 
-                            <label for="last name">
-                                <span class="input-label">Last Name</span>
-                                <div class="input-wrapper last-name-wrapper">
-                                    <input id="last-name" name="lastName" type="text" placeholder="Last Name">
+                                <label id="last-name" for="last name">
+                                    <span class="input-label">Last Name</span>
+                                    <div class="input-wrapper last-name-wrapper">
+                                        <input name="lastName" type="text" placeholder="Last Name">
+                                    </div>
+                                </label>
+                        </div>
+
+                        <div id="email">
+                            <label for="email">
+                                <span class="input-label">Email</span>
+                                <div class="input-wrapper email-wrapper">
+                                    <input name="email" type="text" placeholder="Email">
                                 </div>
                             </label>
                         </div>
 
-                        <label for="email">
-                            <span class="input-label">Email</span>
-                            <div class="input-wrapper email-wrapper">
-                                <input id="email" name="email" type="text" placeholder="Email">
-                            </div>
-                        </label>
-
                         <div id="billing-address">
-                            <label for="country">
+                            <label id="country" for="country">
                                 <span class="input-label">Country</span>
-                                <div class="input-wrapper country-wrapper">
+                                <div class="custom-select" style="width:200px;">
                                     <select name="country">
-                                        <option value="United States">United States</option>
-                                        <option value="">Other</option>
+                                        <option value="0">Select country:</option>
+                                        <option value="1">United States</option>
+                                        <option value="2">Other</option>
                                     </select>
                                 </div>
                             </label>
-                            <div>
-                                <label for="street address">
+                            <div id="address-form">
+                                <label id="street-address" for="street address">
                                     <span class="input-label">Street Address</span>
                                     <div class="input-wrapper street-address-wrapper">
-                                        <input id="street-address-input" name="streetAddress" type="text" placeholder="Street Address">
+                                        <input name="streetAddress" type="text" placeholder="Street Address">
                                     </div>
                                 </label>
 
-                                <label for="city">
-                                    <span class="input-label">City</span>
-                                    <div class="input-wrapper city-wrapper">
-                                        <input id="city-input" name="city" type="text" placeholder="City">
-                                    </div>
-                                </label>
+                                <div id="sub-address">
+                                    <label id="city" for="city">
+                                        <span class="input-label">City</span>
+                                        <div class="input-wrapper city-wrapper">
+                                            <input name="city" type="text" placeholder="City">
+                                        </div>
+                                    </label>
+                                    <label id="state" for="state">
+                                        <span class="input-label">State</span>
+                                        <div class="input-wrapper state-wrapper">
+                                            <input name="state" type="text" placeholder="State">
+                                        </div>
+                                    </label>
+
+                                    <label id="postal-code" for="postal code">
+                                        <span class="input-label">Postal Code</span>
+                                        <div class="input-wrapper postal-code-wrapper">
+                                            <input name="postalCode" type="text" placeholder="Postal/Zip Code">
+                                        </div>
+                                    </label>
+                                </div>
                             </div>
-                            <div>
-                                <label for="state">
-                                    <span class="input-label">State</span>
-                                    <div class="input-wrapper state-wrapper">
-                                        <input id="state-input" name="state" type="text" placeholder="State">
-                                    </div>
-                                </label>
-
-                                <label for="postal code">
-                                    <span class="input-label">Postal Code</span>
-                                    <div class="input-wrapper postal-code-wrapper">
-                                        <input id="postal-code-input" name="postalCode" type="text" placeholder="Postal/Zip Code">
-                                    </div>
-                                </label>
-                            </div>
-
                         </div>
 
                         <div class="bt-drop-in-wrapper">
                             <div id="bt-dropin"></div>
                         </div>
-                    </section>
+
+                    <div class="cost">
+                        <div class="sales-tax cost-item"><span>Sales tax: </span><span><%salesTax | currency : '$'%></span></div>
+                        <div class="subtotal cost-item"><span>Subtotal: </span><span id="subtotal"><%amount | currency : '$'%></span></div>
+                        <div class="total cost-item"><span>Total: </span><span id="total"><%totalAmount | currency : '$'%></span></div>
+                    </div>
 
                     <input id="nonce" name="payment_method_nonce" type="hidden" />
                     <button class="button" type="submit"><span>Test Transaction</span></button>
@@ -182,7 +277,20 @@
             </div>
         </div>
     <script src="https://js.braintreegateway.com/web/dropin/1.18.0/js/dropin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.js"></script>
     <script>
+        const module = angular.module('app', []);
+        module.config(function ($interpolateProvider) {
+            $interpolateProvider.startSymbol('<%');
+            $interpolateProvider.endSymbol('%>');
+        });
+
+        module.run(function ($rootScope) {
+            $rootScope.amount = 10;
+            $rootScope.taxPercentage = .07;
+            $rootScope.salesTax = $rootScope.amount * $rootScope.taxPercentage;
+            $rootScope.totalAmount = $rootScope.amount + $rootScope.salesTax;
+        });
         var form = document.querySelector('#payment-form');
         var client_token = "{{$token}}";
 
