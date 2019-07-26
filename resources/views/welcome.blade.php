@@ -80,6 +80,7 @@
             .checkout {
                 margin: 0 25px;
                 min-width: 480px;
+                max-width: 500px;
             }
 
             .cost {
@@ -103,7 +104,6 @@
             }
 
             #address-form {
-                background-color: #f5f5f5;
                 padding: 10px 5px;
                 margin-top: 10px;
             }
@@ -147,7 +147,7 @@
                 width: 50%;
             }
 
-            #amount {
+            #quantity {
                 width: 75px;
             }
         </style>
@@ -186,10 +186,10 @@
             <div class="checkout container">
                 <form method="post" id="payment-form" action="{{ url('/checkout') }}">
                     @csrf
-                        <label id="amount" for="amount">
-                            <span class="input-label">Amount</span>
-                            <div class="input-wrapper amount-wrapper">
-                                <input id="amount" name="amount" ng-model="amount" type="tel" min="1" placeholder="Amount" value="10">
+                        <label id="quantity" for="quantity">
+                            <span class="input-label">Quantity</span>
+                            <div class="input-wrapper quantity-wrapper">
+                                <input type="number" id="quantity" name="quantity" ng-model="quantity" placeholder="Quantity">
                             </div>
                         </label>
 
@@ -197,14 +197,14 @@
                                 <label id="first-name" for="first name">
                                     <span class="input-label">First Name</span>
                                     <div class="input-wrapper first-name-wrapper">
-                                        <input name="firstName" type="text" placeholder="First Name">
+                                        <input name="firstName" type="text" placeholder="First Name" required>
                                     </div>
                                 </label>
 
                                 <label id="last-name" for="last name">
                                     <span class="input-label">Last Name</span>
                                     <div class="input-wrapper last-name-wrapper">
-                                        <input name="lastName" type="text" placeholder="Last Name">
+                                        <input name="lastName" type="text" placeholder="Last Name" required>
                                     </div>
                                 </label>
                         </div>
@@ -213,7 +213,7 @@
                             <label for="email">
                                 <span class="input-label">Email</span>
                                 <div class="input-wrapper email-wrapper">
-                                    <input name="email" type="text" placeholder="Email">
+                                    <input name="email" type="text" placeholder="Email" required>
                                 </div>
                             </label>
                         </div>
@@ -222,14 +222,14 @@
                             <label id="country" for="country">
                                 <span class="input-label">Country</span>
                                 <div class="custom-select" style="width:200px;">
-                                    <select name="country">
-                                        <option value="0">Select country:</option>
-                                        <option value="1">United States</option>
-                                        <option value="2">Other</option>
+                                    <select required name="country" ng-model="country">
+                                        <option value="" disabled>Select Country</option>
+                                        <option value="United States">United States</option>
+                                        <option value="Other">Other</option>
                                     </select>
                                 </div>
                             </label>
-                            <div id="address-form">
+                            <div id="address-form" ng-if="country == 'United States'">
                                 <label id="street-address" for="street address">
                                     <span class="input-label">Street Address</span>
                                     <div class="input-wrapper street-address-wrapper">
@@ -254,7 +254,7 @@
                                     <label id="postal-code" for="postal code">
                                         <span class="input-label">Postal Code</span>
                                         <div class="input-wrapper postal-code-wrapper">
-                                            <input name="postalCode" type="text" placeholder="Postal/Zip Code">
+                                            <input name="postalCode" type="text" placeholder="Postal Code">
                                         </div>
                                     </label>
                                 </div>
@@ -266,9 +266,9 @@
                         </div>
 
                     <div class="cost">
-                        <div class="sales-tax cost-item"><span>Sales tax: </span><span><%salesTax | currency : '$'%></span></div>
-                        <div class="subtotal cost-item"><span>Subtotal: </span><span id="subtotal"><%amount | currency : '$'%></span></div>
-                        <div class="total cost-item"><span>Total: </span><span id="total"><%totalAmount | currency : '$'%></span></div>
+                        <div class="sales-tax cost-item"><span>Sales tax: </span><span><%(quantity * price) * taxPercentage | currency : '$'%></span></div>
+                        <div class="subtotal cost-item"><span>Subtotal: </span><span id="subtotal"><%quantity * price | currency : '$'%></span></div>
+                        <div class="total cost-item"><span>Total: </span><span id="total"><%(quantity * price) + ((quantity * price) * taxPercentage) | currency : '$'%></span></div>
                     </div>
 
                     <input id="nonce" name="payment_method_nonce" type="hidden" />
@@ -286,10 +286,9 @@
         });
 
         module.run(function ($rootScope) {
-            $rootScope.amount = 10;
-            $rootScope.taxPercentage = .07;
-            $rootScope.salesTax = $rootScope.amount * $rootScope.taxPercentage;
-            $rootScope.totalAmount = $rootScope.amount + $rootScope.salesTax;
+            $rootScope.quantity = 1;
+            $rootScope.taxPercentage = .071;
+            $rootScope.price = 29.99;
         });
         var form = document.querySelector('#payment-form');
         var client_token = "{{$token}}";

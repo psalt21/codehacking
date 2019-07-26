@@ -28,6 +28,10 @@ Route::get('/', function () {
 });
 
 Route::post('/checkout', function (Request $request) {
+    $taxPercentage = 0.071;
+    $price = 29.99;
+    $total = $request->quantity * $price * ($taxPercentage + 1);
+    $formattedTotal = money_format('%i', $total);
     $gateway = new Braintree\Gateway([
         'environment' => config('services.braintree.environment'),
         'merchantId' => config('services.braintree.merchantId'),
@@ -35,8 +39,8 @@ Route::post('/checkout', function (Request $request) {
         'privateKey' => config('services.braintree.privateKey')
     ]);
 
-    $result = $gateway->transaction()->sale([
-        'amount' => $request->amount,
+    $dataWithAddress = [
+        'amount' => $formattedTotal,
         'paymentMethodNonce' => $request->payment_method_nonce,
         'customer' => [
             'firstName' => $request->firstName,
@@ -53,7 +57,23 @@ Route::post('/checkout', function (Request $request) {
         'options' => [
             'submitForSettlement' => true
         ]
-    ]);
+    ];
+
+    $dataNoAddress = [
+        'amount' => $formattedTotal,
+        'paymentMethodNonce' => $request->payment_method_nonce,
+        'customer' => [
+            'firstName' => $request->firstName,
+            'lastName' => $request->lastName,
+            'email' => $request->email
+        ],
+        'options' => [
+            'submitForSettlement' => true
+        ]
+    ];
+
+    $saleData = $request->country == 'Other' ? $dataNoAddress : $dataWithAddress;
+    $result = $gateway->transaction()->sale($saleData);
 
     if ($result->success) {
         $transaction = $result->transaction;
