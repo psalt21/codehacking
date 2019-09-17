@@ -296,9 +296,12 @@
         braintree.dropin.create({
             authorization: client_token,
             selector: '#bt-dropin',
-            // paypal: {
-            // flow: 'vault'
-            // }
+            card: {
+                cardholderName: {
+                    required: true
+                }
+            },
+            verifyCard: true
         }, function (createErr, instance) {
             if (createErr) {
             console.log('Create Error', createErr);
