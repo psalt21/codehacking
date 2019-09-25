@@ -4,7 +4,12 @@
 
     <h1>Edit User</h1>
 
-    {!! Form::model($user, ['method'=>'PATCH', 'files'=> true, 'action'=>['AdminUsersController@update', $user->id]]) !!}
+    <div class="col-sm-3">
+    <img src="{{$user->photo ? $user->photo->file : '/images/default.jpg'}}" alt="" class="img-responsive img-rounded">
+    </div>
+
+    <div class="col-sm-9">
+        {!! Form::model($user, ['method'=>'{POST}', 'action'=>['AdminUsersController@update', $user->id], 'files'=> true]) !!}
         <div class="form-group">
             {!! Form::label('name', 'Name:') !!}
             {!! Form::text('name', null, ['class'=>'form-control']) !!}
@@ -19,7 +24,7 @@
         </div>
         <div class="form-group">
             {!! Form::label('is_active', 'Status:') !!}
-            {!! Form::select('is_active', [1=>'Active', 0=>'Not Active'], 0, ['class'=>'form-control']) !!}
+            {!! Form::select('is_active', [1=>'Active', 0=>'Not Active'], null, ['class'=>'form-control']) !!}
         </div>
         <div class="form-group">
             {!! Form::label('photo_id', 'Photo:') !!}
@@ -30,10 +35,14 @@
             {!! Form::password('password', ['class'=>'form-control']) !!}
         </div>
         <div class="form-group">
-            {!! Form::submit('Create User', ['class'=>'btn btn-primary']) !!}
+            {!! Form::submit('Edit User', ['class'=>'btn btn-primary']) !!}
         </div>
-    {!! Form::close() !!}
+        {!! Form::close() !!}
+    </div>
 
-    @include('includes.form-error')
+    <div class="row">
+        @include('includes.form-error')
+    </div>
+
 
 @stop
